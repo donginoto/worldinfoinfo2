@@ -37,7 +37,14 @@ const init = ()=>{
             evt.preventDefault();
             configPanel.classList.toggle('stwii--isActive');
         });
-        document.body.append(trigger);
+        const leftSendForm = document.querySelector('#leftSendForm');
+
+        if (leftSendForm) {
+    leftSendForm.append(trigger);
+        } else {
+    document.body.append(trigger);
+    }
+        
     }
     const panel = document.createElement('div'); {
         panel.classList.add('stwii--panel');
