@@ -1,0 +1,580 @@
+/*
+ * SillyTavern-WorldInfoInfo style.css
+ * Blue Lemonade integration edition
+ *
+ * Base: LenAnderson/SillyTavern-WorldInfoInfo
+ * Customization:
+ *   - WorldInfoInfo trigger fits inside #leftSendForm
+ *   - Mobile panel opens above the input area
+ *   - Mobile panel has a stable, usable height
+ *   - Long lists scroll inside the panel
+ *   - Entry titles stay on one line with ellipsis
+ */
+
+/* =========================================================
+   ORIGINAL WORLDINFOINFO STYLES
+   ========================================================= */
+
+.stwii--trigger {
+  position: absolute;
+  bottom: 0.125em;
+  left: 0.25em;
+  font-size: 2em;
+  opacity: 0.25;
+  transition: opacity 200ms;
+  cursor: pointer;
+  z-index: 3010;
+  filter: drop-shadow(2px 4px 6px black);
+  display: block;
+  anchor-name: --stac--wiAnchor;
+}
+
+.stwii--trigger:not([data-stwii--badge-count="0"]):hover::after {
+  opacity: 1;
+}
+
+.stwii--trigger:not([data-stwii--badge-count="0"])::after {
+  content: attr(data-stwii--badge-count);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: calc(0.65 * var(--mainFontSize));
+  font-weight: bold;
+  font-family: var(--mainFontFamily);
+  color: white;
+  background: black;
+  line-height: 1;
+  padding: 0.25em;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  height: 1lh;
+  text-align: center;
+  pointer-events: none;
+  transition: 200ms;
+}
+
+.stwii--trigger:not([data-stwii--badge-count="0"]).stwii--badge-in::after {
+  animation: stwii--badge-popin 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stwii--trigger:not([data-stwii--badge-count="0"]).stwii--badge-out::after {
+  animation: stwii--badge-popin 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) reverse;
+}
+
+.stwii--trigger:not([data-stwii--badge-count="0"]).stwii--badge-bounce::after {
+  animation: stwii--badge-bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation-iteration-count: 2;
+}
+
+.stwii--panel {
+  filter: drop-shadow(1px 1px 2px var(--black50a));
+  z-index: 30000;
+  overflow: auto;
+  border-radius: 10px;
+  aspect-ratio: unset;
+  padding: 0.5em;
+  display: none;
+  flex-direction: column;
+  right: 3.5em;
+  top: 1em;
+  font-size: small;
+  max-height: calc(100vh - 1em);
+  max-width: calc((100vw - var(--sheldWidth)) / 2 - 3.5em);
+  background-color: var(--secondaryBg, var(--SmartThemeBlurTintColor));
+  position: fixed;
+  position-anchor: --stac--wiAnchor;
+  position-area: top right;
+  position-try-fallbacks: flip-block, flip-inline;
+  margin-bottom: -2em;
+}
+
+.stwii--panel.stwii--isActive {
+  display: flex;
+}
+
+.stwii--world {
+  font-weight: bold;
+}
+
+.stwii--entry {
+  gap: 0.5em;
+  padding-left: 1em;
+  display: flex;
+  align-items: center;
+  opacity: 0.75;
+  cursor: help;
+  transition: 200ms;
+}
+
+.stwii--entry:hover {
+  opacity: 1;
+}
+
+.stwii--entry.stwii--isBroken {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.stwii--note .stwii--strategy::before {
+  opacity: 0.5;
+}
+
+.stwii--messages .stwii--strategy {
+  position: relative;
+}
+
+.stwii--messages .stwii--strategy::after {
+  content: attr(data-stwii--count);
+  font-family: var(--mainFontFamily);
+  position: absolute;
+  inset: 0;
+  text-shadow: -1px -1px 1px black, 1px 1px 1px black, -1px 1px 1px black, 1px -1px 1px black;
+  font-size: 0.75em;
+  padding-top: 0.25em;
+}
+
+.stwii--messages .stwii--strategy::before {
+  opacity: 0.5;
+}
+
+.stwii--messages .stwii--title {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.5em;
+  width: 0;
+}
+
+.stwii--messages .stwii--title .stwii--first,
+.stwii--messages .stwii--title .stwii--last {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stwii--messages .stwii--title .stwii--sep {
+  opacity: 0.75;
+  flex: 0 0 auto;
+  line-height: 0.125em;
+  padding-bottom: 0.6em;
+}
+
+.stwii--configRow {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.5em;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 200ms;
+}
+
+.stwii--configRow:hover {
+  opacity: 1;
+}
+
+@keyframes stwii--badge-popin {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  48% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes stwii--badge-bounce {
+  0% {
+    opacity: 0.5;
+    transform: scale(1) translateY(0);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1.1, 0.9) translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(0.9, 1.1) translateY(-0.5em);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05, 0.95) translateY(0);
+  }
+  57% {
+    opacity: 1;
+    transform: scale(1) translateY(-0.125em);
+  }
+  64% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+/* =========================================================
+   BLUE LEMONADE INTEGRATION
+   ========================================================= */
+
+/*
+ * This assumes index.js was changed so the trigger is appended
+ * to #leftSendForm instead of document.body.
+ *
+ * const leftSendForm = document.querySelector('#leftSendForm');
+ * if (leftSendForm) leftSendForm.append(trigger);
+ * else document.body.append(trigger);
+ */
+
+/* ---------------------------------------------------------
+   Trigger: make WorldInfoInfo look like a native input-bar icon
+   --------------------------------------------------------- */
+
+#leftSendForm > .stwii--trigger {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  flex: 1 0 28px !important;
+  width: auto !important;
+  min-width: 28px !important;
+  max-width: var(--bottomFormBlockSize, 40px) !important;
+  height: var(--bottomFormBlockSize, 40px) !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-size: 20px !important;
+  line-height: var(--bottomFormBlockSize, 40px) !important;
+
+  color: var(--salty-muted, var(--SmartThemeBodyColor)) !important;
+  background: transparent !important;
+
+  opacity: 1 !important;
+  filter: none !important;
+
+  cursor: pointer;
+  z-index: auto !important;
+
+  /*
+   * The mobile panel below uses fixed positioning instead of
+   * the original CSS anchor, so the trigger does not need to
+   * expose an anchor on mobile. It is harmless on desktop.
+   */
+  transition: color 150ms ease, opacity 150ms ease !important;
+}
+
+@media (hover: hover) {
+  #leftSendForm > .stwii--trigger:hover {
+    color: var(--salty-text, var(--SmartThemeBodyColor)) !important;
+  }
+}
+
+/* Badge */
+#leftSendForm > .stwii--trigger:not([data-stwii--badge-count="0"])::after {
+  right: -2px !important;
+  bottom: -1px !important;
+
+  box-sizing: border-box !important;
+
+  width: auto !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  aspect-ratio: auto !important;
+
+  padding: 2px 4px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-size: 10px !important;
+  line-height: 1 !important;
+
+  border-radius: 999px !important;
+
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+
+  opacity: 1;
+  pointer-events: none !important;
+}
+
+
+/* =========================================================
+   MOBILE PANEL
+   ========================================================= */
+
+@media screen and (max-width: 1000px) {
+  :root {
+    /*
+     * Tweak ONLY this value if your quick-reply/input block
+     * becomes taller or shorter.
+     *
+     * 170px works well with the Blue Lemonade mobile layout
+     * shown in the reference screenshots.
+     */
+    --stwii-mobile-bottom-gap: 170px;
+  }
+
+  /*
+   * IMPORTANT:
+   * Do NOT override display here.
+   * The extension's own rules remain responsible for:
+   *
+   *   .stwii--panel                 -> display: none
+   *   .stwii--panel.stwii--isActive -> display: flex
+   *
+   * This keeps the click-to-open logic intact.
+   */
+  .stwii--panel {
+    position: fixed !important;
+
+    /* Disable the original desktop anchor placement */
+    position-anchor: none !important;
+    position-area: unset !important;
+    position-try-fallbacks: none !important;
+
+    top: auto !important;
+    left: 4vw !important;
+    right: 4vw !important;
+    bottom: calc(var(--stwii-mobile-bottom-gap) + env(safe-area-inset-bottom, 0px)) !important;
+
+    transform: none !important;
+    margin: 0 !important;
+
+    /*
+     * Wide sheet above the input box.
+     * Fixed height prevents the "one-line-tall" collapse,
+     * while max-height prevents it from escaping offscreen.
+     */
+    width: 92vw !important;
+    min-width: 0 !important;
+    max-width: 92vw !important;
+
+    height: min(50dvh, 460px) !important;
+    min-height: 0 !important;
+    max-height: calc(
+      100dvh - var(--stwii-mobile-bottom-gap) - 110px - env(safe-area-inset-bottom, 0px)
+    ) !important;
+
+    box-sizing: border-box !important;
+
+    padding: 12px 10px 12px 14px !important;
+
+    /* Long WI lists scroll INSIDE the panel */
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch;
+
+    aspect-ratio: auto !important;
+
+    border-radius: 14px !important;
+
+    background-color:
+      var(--salty-fill-surface,
+      var(--salty-surface,
+      var(--secondaryBg, var(--SmartThemeBlurTintColor)))) !important;
+
+    color: var(--salty-text, var(--SmartThemeBodyColor)) !important;
+
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) !important;
+
+    z-index: 30000 !important;
+
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+
+    scrollbar-width: auto !important;
+    scrollbar-color:
+      var(--salty-shade-2, rgba(180, 180, 180, 0.7))
+      transparent !important;
+  }
+
+  /* Chromium / Android scrollbar */
+  .stwii--panel::-webkit-scrollbar {
+    display: block !important;
+    width: 7px !important;
+    height: 7px !important;
+  }
+
+  .stwii--panel::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .stwii--panel::-webkit-scrollbar-thumb {
+    background: var(--salty-shade-2, rgba(180, 180, 180, 0.7)) !important;
+    border-radius: 999px !important;
+  }
+
+  .stwii--panel::-webkit-scrollbar-thumb:active {
+    background: var(--salty-muted, rgba(220, 220, 220, 0.9)) !important;
+  }
+
+  /* Book heading */
+  .stwii--panel .stwii--world {
+    flex: 0 0 auto !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    margin: 8px 0 3px !important;
+    padding: 2px 4px !important;
+
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .stwii--panel .stwii--world:first-child {
+    margin-top: 0 !important;
+  }
+
+  /* WI row */
+  .stwii--panel .stwii--entry {
+    flex: 0 0 auto !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    gap: 7px !important;
+    padding: 3px 5px 3px 8px !important;
+
+    line-height: 1.4 !important;
+
+    opacity: 0.9;
+  }
+
+  .stwii--panel .stwii--entry:hover {
+    opacity: 1;
+  }
+
+  /* Strategy icon: blue/green dot, message icon, note icon */
+  .stwii--panel .stwii--strategy {
+    flex: 0 0 auto !important;
+
+    width: auto !important;
+    min-width: 20px !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  /* Entry title */
+  .stwii--panel .stwii--title {
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Sticky counter */
+  .stwii--panel .stwii--sticky {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+
+  /*
+   * Message-history rows deliberately used width: 0 in the
+   * original stylesheet. Preserve that flex trick while making
+   * sure it cannot force the mobile panel wider.
+   */
+  .stwii--panel .stwii--messages .stwii--title {
+    flex: 1 1 auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .stwii--panel .stwii--messages .stwii--title .stwii--first,
+  .stwii--panel .stwii--messages .stwii--title .stwii--last {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Config panel rows use the same popup shell */
+  .stwii--panel .stwii--configRow {
+    flex: 0 0 auto !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+
+    padding: 8px !important;
+    gap: 10px !important;
+  }
+}
+
+
+/* =========================================================
+   EXTRA-SMALL MOBILE SAFETY
+   ========================================================= */
+
+@media screen and (max-width: 520px) {
+  :root {
+    --stwii-mobile-bottom-gap: 165px;
+  }
+
+  .stwii--panel {
+    left: 5vw !important;
+    right: 5vw !important;
+
+    width: 90vw !important;
+    max-width: 90vw !important;
+
+    /*
+     * On short displays, use what is available instead of
+     * overflowing beyond the top toolbar.
+     */
+    height: min(
+      50dvh,
+      calc(100dvh - var(--stwii-mobile-bottom-gap) - 105px - env(safe-area-inset-bottom, 0px))
+    ) !important;
+
+    max-height: calc(
+      100dvh - var(--stwii-mobile-bottom-gap) - 105px - env(safe-area-inset-bottom, 0px)
+    ) !important;
+  }
+}
