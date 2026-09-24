@@ -222,3 +222,44 @@ body.salty #leftSendForm > .stwii--trigger {
         color: var(--salty-text) !important;
     }
 }
+
+/* WorldInfoInfo - mobile panel fix */
+@media (max-width: 1000px) {
+    .stwii--panel {
+        position: fixed !important;
+
+        /* 기존 anchor positioning 무효화 */
+        position-anchor: none !important;
+        position-area: unset !important;
+        position-try-fallbacks: none !important;
+
+        /* 화면 가운데 */
+        left: 50% !important;
+        right: auto !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translate(-50%, -50%) !important;
+
+        /* 모바일 화면에 맞는 크기 */
+        width: min(85vw, 420px) !important;
+        max-width: 85vw !important;
+        min-width: 0 !important;
+
+        max-height: 70vh !important;
+        overflow-y: auto !important;
+
+        margin: 0 !important;
+        box-sizing: border-box !important;
+
+        /* Blue Lemonade 위로 */
+        z-index: 30000 !important;
+    }
+
+    .stwii--entry {
+        min-width: 0 !important;
+    }
+
+    .stwii--title {
+        min-width: 0 !important;
+    }
+}
