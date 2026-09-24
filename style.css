@@ -223,43 +223,100 @@ body.salty #leftSendForm > .stwii--trigger {
     }
 }
 
-/* WorldInfoInfo - mobile panel fix */
+/* =========================================================
+   WorldInfoInfo mobile panel
+   입력창 위 고정 + 화면 안쪽 제한 + 내부 스크롤
+   ========================================================= */
+
 @media (max-width: 1000px) {
-    .stwii--panel {
+
+    body.salty .stwii--panel {
         position: fixed !important;
 
-        /* 기존 anchor positioning 무효화 */
+        /* 기존 anchor positioning 제거 */
         position-anchor: none !important;
         position-area: unset !important;
         position-try-fallbacks: none !important;
 
-        /* 화면 가운데 */
-        left: 50% !important;
-        right: auto !important;
-        top: 50% !important;
-        bottom: auto !important;
-        transform: translate(-50%, -50%) !important;
+        /*
+         * 화면 상단과 입력창 사이를 패널 영역으로 사용
+         *
+         * top: 상단 메뉴 아래 여백
+         * bottom: 입력창 위 여백
+         */
+        top: 135px !important;
+        bottom: 190px !important;
 
-        /* 모바일 화면에 맞는 크기 */
-        width: min(85vw, 420px) !important;
-        max-width: 85vw !important;
+        left: 20px !important;
+        right: 20px !important;
+
+        /* top + bottom으로 높이를 결정하므로 자동 */
+        width: auto !important;
+        height: auto !important;
+
         min-width: 0 !important;
+        max-width: none !important;
 
-        max-height: 70vh !important;
-        overflow-y: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
 
         margin: 0 !important;
+        padding: 10px 8px 10px 12px !important;
+
         box-sizing: border-box !important;
 
-        /* Blue Lemonade 위로 */
+        transform: none !important;
+
+        /* 핵심 */
+        overflow-x: hidden !important;
+        overflow-y: scroll !important;
+
+        /*
+         * 모바일에서 스크롤이 패널 안에서만 일어나도록
+         */
+        overscroll-behavior: contain !important;
+        -webkit-overflow-scrolling: touch;
+
+        border-radius: 14px !important;
+
+        background:
+            var(--secondaryBg, var(--SmartThemeBlurTintColor)) !important;
+
+        filter:
+            drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) !important;
+
         z-index: 30000 !important;
+
+        font-size: 13px !important;
+
+        /* Firefox */
+        scrollbar-width: auto !important;
+        scrollbar-color:
+            rgba(180, 180, 180, 0.65)
+            rgba(0, 0, 0, 0.15) !important;
     }
 
-    .stwii--entry {
-        min-width: 0 !important;
+
+    /* =====================================================
+       Chromium / Android 스크롤바
+       ===================================================== */
+
+    body.salty .stwii--panel::-webkit-scrollbar {
+        width: 7px !important;
+        display: block !important;
     }
 
-    .stwii--title {
-        min-width: 0 !important;
+    body.salty .stwii--panel::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.15) !important;
+        border-radius: 10px !important;
+    }
+
+    body.salty .stwii--panel::-webkit-scrollbar-thumb {
+        background: rgba(180, 180, 180, 0.65) !important;
+        border-radius: 10px !important;
+    }
+
+    body.salty .stwii--panel::-webkit-scrollbar-thumb:active {
+        background: rgba(220, 220, 220, 0.85) !important;
     }
 }
