@@ -223,9 +223,10 @@ body.salty #leftSendForm > .stwii--trigger {
     }
 }
 
+
 /* =========================================================
-   WorldInfoInfo mobile panel
-   입력창 위 고정 + 화면 안쪽 제한 + 내부 스크롤
+   WorldInfoInfo × Blue Lemonade
+   MOBILE PANEL - FINAL OVERRIDE
    ========================================================= */
 
 @media (max-width: 1000px) {
@@ -233,49 +234,40 @@ body.salty #leftSendForm > .stwii--trigger {
     body.salty .stwii--panel {
         position: fixed !important;
 
-        /* 기존 anchor positioning 제거 */
+        /* 원본 anchor 완전 무효화 */
         position-anchor: none !important;
         position-area: unset !important;
         position-try-fallbacks: none !important;
 
-        /*
-         * 화면 상단과 입력창 사이를 패널 영역으로 사용
-         *
-         * top: 상단 메뉴 아래 여백
-         * bottom: 입력창 위 여백
-         */
-        top: 135px !important;
-        bottom: 190px !important;
-
+        /* 입력창 바로 위 */
         left: 20px !important;
         right: 20px !important;
+        bottom: 190px !important;
+        top: auto !important;
 
-        /* top + bottom으로 높이를 결정하므로 자동 */
+        transform: none !important;
+
+        /* ★ 핵심: 높이를 확실하게 지정 */
         width: auto !important;
-        height: auto !important;
+        height: 55vh !important;
 
         min-width: 0 !important;
         max-width: none !important;
 
-        min-height: 0 !important;
-        max-height: none !important;
-
-        margin: 0 !important;
-        padding: 10px 8px 10px 12px !important;
+        min-height: 300px !important;
+        max-height: 500px !important;
 
         box-sizing: border-box !important;
 
-        transform: none !important;
+        margin: 0 !important;
+        padding: 12px 8px 12px 14px !important;
 
-        /* 핵심 */
+        /* ★ 내용이 넘치면 패널 안에서 스크롤 */
         overflow-x: hidden !important;
         overflow-y: scroll !important;
 
-        /*
-         * 모바일에서 스크롤이 패널 안에서만 일어나도록
-         */
         overscroll-behavior: contain !important;
-        -webkit-overflow-scrolling: touch;
+        -webkit-overflow-scrolling: touch !important;
 
         border-radius: 14px !important;
 
@@ -287,23 +279,35 @@ body.salty #leftSendForm > .stwii--trigger {
 
         z-index: 30000 !important;
 
-        font-size: 13px !important;
+        font-size: 14px !important;
 
         /* Firefox */
         scrollbar-width: auto !important;
         scrollbar-color:
-            rgba(180, 180, 180, 0.65)
+            rgba(180, 180, 180, 0.7)
             rgba(0, 0, 0, 0.15) !important;
     }
 
 
+    /* 비활성 */
+    body.salty .stwii--panel:not(.stwii--isActive) {
+        display: none !important;
+    }
+
+
+    /* 활성 */
+    body.salty .stwii--panel.stwii--isActive {
+        display: block !important;
+    }
+
+
     /* =====================================================
-       Chromium / Android 스크롤바
+       Android / Chromium scrollbar
        ===================================================== */
 
     body.salty .stwii--panel::-webkit-scrollbar {
-        width: 7px !important;
         display: block !important;
+        width: 8px !important;
     }
 
     body.salty .stwii--panel::-webkit-scrollbar-track {
@@ -312,11 +316,86 @@ body.salty #leftSendForm > .stwii--trigger {
     }
 
     body.salty .stwii--panel::-webkit-scrollbar-thumb {
-        background: rgba(180, 180, 180, 0.65) !important;
+        background: rgba(180, 180, 180, 0.7) !important;
         border-radius: 10px !important;
     }
 
     body.salty .stwii--panel::-webkit-scrollbar-thumb:active {
-        background: rgba(220, 220, 220, 0.85) !important;
+        background: rgba(230, 230, 230, 0.9) !important;
+    }
+
+
+    /* =====================================================
+       항목 레이아웃
+       ===================================================== */
+
+    body.salty .stwii--world {
+        display: block !important;
+
+        width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 8px 0 4px !important;
+
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+
+    body.salty .stwii--entry {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+
+        width: 100% !important;
+        min-width: 0 !important;
+
+        gap: 7px !important;
+
+        padding: 3px 5px !important;
+
+        box-sizing: border-box !important;
+
+        line-height: 1.4 !important;
+    }
+
+
+    body.salty .stwii--strategy {
+        flex: 0 0 auto !important;
+
+        min-width: 20px !important;
+
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
+
+
+    body.salty .stwii--title {
+        flex: 1 1 auto !important;
+
+        width: auto !important;
+        min-width: 0 !important;
+
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+
+    body.salty .stwii--sticky {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
+
+
+    /* 원본 message title width:0 방지 */
+    body.salty .stwii--messages .stwii--title {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
     }
 }
