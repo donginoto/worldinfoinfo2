@@ -1,4 +1,4 @@
-/* World Info Lens 1.0.1 — no dependencies, no changes to prompts or lorebooks. */
+/* World Info Lens 1.0.2 — no dependencies, no changes to prompts or lorebooks. */
 (() => {
     'use strict';
     const KEY = '__worldInfoLensV1';
@@ -83,7 +83,7 @@
             button.setAttribute('aria-expanded', String(dialog.open));
             if (!dialog.open) return;
             const label = { idle: '입력을 보내면 적용된 항목이 여기에 표시됩니다.', pending: '월드인포 적용 결과를 기다리는 중…', done: `적용 ${entries.length}개`, stopped: `중단된 생성 · 확인된 항목 ${entries.length}개` }[status];
-            meta.textContent = label + (stamp ? ` · ${stamp}` : '') + (generationType === 'swipe' ? ' · 재생성' : '');
+            meta.textContent = label + (stamp ? ` · ${stamp}` : '') + (generationType === 'swipe' ? ' · 재생성' : generationType === 'quiet' ? ' · QR/백그라운드 생성' : '');
             const query = search.value.trim().toLocaleLowerCase();
             const filtered = entries.filter(e => [e.title, e.world, e.content, e.keys].join('\n').toLocaleLowerCase().includes(query));
             list.replaceChildren();
@@ -132,11 +132,10 @@
         observer.observe(document.body, { childList: true, subtree: true });
         function on(name, fn) { if (eventTypes[name]) eventSource.on(eventTypes[name], fn); }
         on(eventTypes.GENERATION_AFTER_COMMANDS ? 'GENERATION_AFTER_COMMANDS' : 'GENERATION_STARTED', (type, options, dryRun) => {
-            // Dry-run scans have no activation event. Quiet background tasks should
-            // not replace the last user-visible generation's list.
+            // /gen uses quiet generation too. Capture all real generations;
+            // only prompt previews (dry runs) are excluded.
             if (dryRun) return;
-            capture = type !== 'quiet';
-            if (!capture) return;
+            capture = true;
             entries = []; seen = false; stamp = ''; generationType = type;
             status = 'pending'; render();
         });
