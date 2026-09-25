@@ -1,4 +1,4 @@
-/* World Info Lens 1.0.0 — no dependencies, no changes to prompts or lorebooks. */
+/* World Info Lens 1.0.1 — no dependencies, no changes to prompts or lorebooks. */
 (() => {
     'use strict';
     const KEY = '__worldInfoLensV1';
@@ -116,13 +116,18 @@
         });
         search.addEventListener('input', render);
         function mount() {
-            const form = document.querySelector('#send_form');
-            if (form && bar.parentElement !== form) form.append(bar);
+            // Share the existing icon row; never add a full-width composer row.
+            const row = document.querySelector('#nonQRFormItems');
+            const target = row || document.querySelector('#leftSendForm');
+            if (!target || bar.parentElement === target) return;
+            const anchor = [...target.children].find(el => el.id === 'jj-button')
+                || [...target.children].find(el => el.id === 'rightSendForm');
+            target.insertBefore(bar, anchor || null);
         }
         mount();
         // Remount only when a theme/host replaces the composer, not on token text updates.
         const observer = new MutationObserver(records => {
-            if (records.some(r => [...r.addedNodes, ...r.removedNodes].some(n => n.nodeType === 1 && (n.id === 'send_form' || n.id === 'wil-toolbar' || n.querySelector?.('#send_form'))))) mount();
+            if (records.some(r => [...r.addedNodes, ...r.removedNodes].some(n => n.nodeType === 1 && (['send_form', 'nonQRFormItems', 'leftSendForm', 'wil-toolbar'].includes(n.id) || n.querySelector?.('#send_form, #nonQRFormItems, #leftSendForm'))))) mount();
         });
         observer.observe(document.body, { childList: true, subtree: true });
         function on(name, fn) { if (eventTypes[name]) eventSource.on(eventTypes[name], fn); }
