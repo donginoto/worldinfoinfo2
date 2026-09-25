@@ -321,260 +321,193 @@
   pointer-events: none !important;
 }
 
-
 /* =========================================================
-   MOBILE PANEL
+   WorldInfoInfo × Blue Lemonade
+   MOBILE PANEL - WORKING FINAL OVERRIDE
    ========================================================= */
 
-@media screen and (max-width: 1000px) {
-  :root {
-    /*
-     * Tweak ONLY this value if your quick-reply/input block
-     * becomes taller or shorter.
-     *
-     * 170px works well with the Blue Lemonade mobile layout
-     * shown in the reference screenshots.
-     */
-    --stwii-mobile-bottom-gap: 170px;
-  }
-
-  /*
-   * IMPORTANT:
-   * Do NOT override display here.
-   * The extension's own rules remain responsible for:
-   *
-   *   .stwii--panel                 -> display: none
-   *   .stwii--panel.stwii--isActive -> display: flex
-   *
-   * This keeps the click-to-open logic intact.
-   */
-  .stwii--panel {
-    position: fixed !important;
-
-    /* Disable the original desktop anchor placement */
-    position-anchor: none !important;
-    position-area: unset !important;
-    position-try-fallbacks: none !important;
-
-    top: auto !important;
-    left: 4vw !important;
-    right: 4vw !important;
-    bottom: calc(var(--stwii-mobile-bottom-gap) + env(safe-area-inset-bottom, 0px)) !important;
-
-    transform: none !important;
-    margin: 0 !important;
+@media (max-width: 1000px) {
 
     /*
-     * Wide sheet above the input box.
-     * Fixed height prevents the "one-line-tall" collapse,
-     * while max-height prevents it from escaping offscreen.
+     * IMPORTANT:
+     * Blue Lemonade can override the extension's ordinary
+     * display rule. Keep these body.salty + !important rules.
+     * This is the part that makes the panel actually open.
      */
-    width: 92vw !important;
-    min-width: 0 !important;
-    max-width: 92vw !important;
 
-    height: min(50dvh, 460px) !important;
-    min-height: 0 !important;
-    max-height: calc(
-      100dvh - var(--stwii-mobile-bottom-gap) - 110px - env(safe-area-inset-bottom, 0px)
-    ) !important;
+    body.salty .stwii--panel {
+        position: fixed !important;
 
-    box-sizing: border-box !important;
+        /* Original CSS anchor positioning off on mobile */
+        position-anchor: none !important;
+        position-area: unset !important;
+        position-try-fallbacks: none !important;
 
-    padding: 12px 10px 12px 14px !important;
+        /* Sit directly above the Blue Lemonade input area */
+        left: 20px !important;
+        right: 20px !important;
+        bottom: 190px !important;
+        top: auto !important;
 
-    /* Long WI lists scroll INSIDE the panel */
-    overflow-x: hidden !important;
-    overflow-y: scroll !important;
-    overscroll-behavior: contain !important;
-    -webkit-overflow-scrolling: touch;
+        transform: none !important;
 
-    aspect-ratio: auto !important;
+        /*
+         * Stable mobile size.
+         * On the reference phone this resolves to a comfortable
+         * 300–500px tall sheet instead of a collapsed strip.
+         */
+        width: auto !important;
+        height: 55vh !important;
 
-    border-radius: 14px !important;
+        min-width: 0 !important;
+        max-width: none !important;
 
-    background-color:
-      var(--salty-fill-surface,
-      var(--salty-surface,
-      var(--secondaryBg, var(--SmartThemeBlurTintColor)))) !important;
+        min-height: 300px !important;
+        max-height: 500px !important;
 
-    color: var(--salty-text, var(--SmartThemeBodyColor)) !important;
+        box-sizing: border-box !important;
 
-    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) !important;
+        margin: 0 !important;
+        padding: 12px 8px 12px 14px !important;
 
-    z-index: 30000 !important;
+        /* Long WI lists scroll inside the popup */
+        overflow-x: hidden !important;
+        overflow-y: scroll !important;
 
-    font-size: 14px !important;
-    line-height: 1.4 !important;
+        overscroll-behavior: contain !important;
+        -webkit-overflow-scrolling: touch !important;
 
-    scrollbar-width: auto !important;
-    scrollbar-color:
-      var(--salty-shade-2, rgba(180, 180, 180, 0.7))
-      transparent !important;
-  }
+        /* Prevent the original desktop sizing rules interfering */
+        aspect-ratio: auto !important;
 
-  /* Chromium / Android scrollbar */
-  .stwii--panel::-webkit-scrollbar {
-    display: block !important;
-    width: 7px !important;
-    height: 7px !important;
-  }
+        border-radius: 14px !important;
 
-  .stwii--panel::-webkit-scrollbar-track {
-    background: transparent !important;
-  }
+        background:
+            var(--secondaryBg, var(--SmartThemeBlurTintColor)) !important;
 
-  .stwii--panel::-webkit-scrollbar-thumb {
-    background: var(--salty-shade-2, rgba(180, 180, 180, 0.7)) !important;
-    border-radius: 999px !important;
-  }
+        filter:
+            drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) !important;
 
-  .stwii--panel::-webkit-scrollbar-thumb:active {
-    background: var(--salty-muted, rgba(220, 220, 220, 0.9)) !important;
-  }
+        z-index: 30000 !important;
 
-  /* Book heading */
-  .stwii--panel .stwii--world {
-    flex: 0 0 auto !important;
+        font-size: 14px !important;
 
-    width: 100% !important;
-    min-width: 0 !important;
+        scrollbar-width: auto !important;
+        scrollbar-color:
+            rgba(180, 180, 180, 0.7)
+            rgba(0, 0, 0, 0.15) !important;
+    }
 
-    box-sizing: border-box !important;
+    /*
+     * DO NOT remove these two rules.
+     * The last broken build omitted the !important active-state
+     * override, so Blue Lemonade won the cascade and the panel
+     * remained invisible even though JS toggled the class.
+     */
+    body.salty .stwii--panel:not(.stwii--isActive) {
+        display: none !important;
+    }
 
-    margin: 8px 0 3px !important;
-    padding: 2px 4px !important;
+    body.salty .stwii--panel.stwii--isActive {
+        display: block !important;
+    }
 
-    font-weight: 700 !important;
-    line-height: 1.35 !important;
 
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
+    /* =====================================================
+       Android / Chromium scrollbar
+       ===================================================== */
 
-  .stwii--panel .stwii--world:first-child {
-    margin-top: 0 !important;
-  }
+    body.salty .stwii--panel::-webkit-scrollbar {
+        display: block !important;
+        width: 8px !important;
+    }
 
-  /* WI row */
-  .stwii--panel .stwii--entry {
-    flex: 0 0 auto !important;
+    body.salty .stwii--panel::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.15) !important;
+        border-radius: 10px !important;
+    }
 
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
+    body.salty .stwii--panel::-webkit-scrollbar-thumb {
+        background: rgba(180, 180, 180, 0.7) !important;
+        border-radius: 10px !important;
+    }
 
-    width: 100% !important;
-    min-width: 0 !important;
+    body.salty .stwii--panel::-webkit-scrollbar-thumb:active {
+        background: rgba(230, 230, 230, 0.9) !important;
+    }
 
-    box-sizing: border-box !important;
 
-    gap: 7px !important;
-    padding: 3px 5px 3px 8px !important;
+    /* =====================================================
+       Entry layout
+       ===================================================== */
 
-    line-height: 1.4 !important;
+    body.salty .stwii--world {
+        display: block !important;
 
-    opacity: 0.9;
-  }
+        width: 100% !important;
+        min-width: 0 !important;
 
-  .stwii--panel .stwii--entry:hover {
-    opacity: 1;
-  }
+        margin: 8px 0 4px !important;
 
-  /* Strategy icon: blue/green dot, message icon, note icon */
-  .stwii--panel .stwii--strategy {
-    flex: 0 0 auto !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
 
-    width: auto !important;
-    min-width: 20px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
 
-    text-align: center !important;
-    white-space: nowrap !important;
-  }
+    body.salty .stwii--entry {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
 
-  /* Entry title */
-  .stwii--panel .stwii--title {
-    flex: 1 1 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
 
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
+        gap: 7px !important;
 
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
+        padding: 3px 5px !important;
 
-  /* Sticky counter */
-  .stwii--panel .stwii--sticky {
-    flex: 0 0 auto !important;
-    white-space: nowrap !important;
-  }
+        box-sizing: border-box !important;
 
-  /*
-   * Message-history rows deliberately used width: 0 in the
-   * original stylesheet. Preserve that flex trick while making
-   * sure it cannot force the mobile panel wider.
-   */
-  .stwii--panel .stwii--messages .stwii--title {
-    flex: 1 1 auto !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
+        line-height: 1.4 !important;
+    }
 
-  .stwii--panel .stwii--messages .stwii--title .stwii--first,
-  .stwii--panel .stwii--messages .stwii--title .stwii--last {
-    width: 100% !important;
-    min-width: 0 !important;
+    body.salty .stwii--strategy {
+        flex: 0 0 auto !important;
 
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
+        min-width: 20px !important;
 
-  /* Config panel rows use the same popup shell */
-  .stwii--panel .stwii--configRow {
-    flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
 
-    width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
+    body.salty .stwii--title {
+        flex: 1 1 auto !important;
 
-    padding: 8px !important;
-    gap: 10px !important;
-  }
+        width: auto !important;
+        min-width: 0 !important;
+
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    body.salty .stwii--sticky {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
+
+    /*
+     * Preserve enough width for message-history titles.
+     * The upstream stylesheet deliberately uses width:0 here;
+     * on the narrow mobile sheet that can become too aggressive.
+     */
+    body.salty .stwii--messages .stwii--title {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
 }
 
-
-/* =========================================================
-   EXTRA-SMALL MOBILE SAFETY
-   ========================================================= */
-
-@media screen and (max-width: 520px) {
-  :root {
-    --stwii-mobile-bottom-gap: 165px;
-  }
-
-  .stwii--panel {
-    left: 5vw !important;
-    right: 5vw !important;
-
-    width: 90vw !important;
-    max-width: 90vw !important;
-
-    /*
-     * On short displays, use what is available instead of
-     * overflowing beyond the top toolbar.
-     */
-    height: min(
-      50dvh,
-      calc(100dvh - var(--stwii-mobile-bottom-gap) - 105px - env(safe-area-inset-bottom, 0px))
-    ) !important;
-
-    max-height: calc(
-      100dvh - var(--stwii-mobile-bottom-gap) - 105px - env(safe-area-inset-bottom, 0px)
-    ) !important;
-  }
-}
