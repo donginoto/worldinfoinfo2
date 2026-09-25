@@ -147,7 +147,9 @@ const init = ()=>{
         for (const popup of [panel, configPanel]) {
             popup.style.setProperty('--stwii-left', `${left}px`);
             popup.style.setProperty('--stwii-width', `${width}px`);
-            popup.style.setProperty('--stwii-bottom', `${window.innerHeight - bottomEdge}px`);
+            // Mobile ST fixes body under a transformed, zero-height html root.
+            // Bottom offsets resolve against that root, not the viewport.
+            popup.style.setProperty('--stwii-top', `${bottomEdge}px`);
             popup.style.setProperty('--stwii-max-height', `${availableHeight}px`);
         }
     };
