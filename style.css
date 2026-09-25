@@ -6,7 +6,7 @@
  * Customization:
  *   - WorldInfoInfo trigger fits inside #leftSendForm
  *   - Mobile panel opens above the input area
- *   - Mobile panel has a stable, usable height
+ *   - Panel height is limited to available viewport space
  *   - Long lists scroll inside the panel
  *   - Entry titles stay on one line with ellipsis
  */
@@ -321,193 +321,55 @@
   pointer-events: none !important;
 }
 
-/* =========================================================
-   WorldInfoInfo × Blue Lemonade
-   MOBILE PANEL - WORKING FINAL OVERRIDE
-   ========================================================= */
-
-@media (max-width: 1000px) {
-
-    /*
-     * IMPORTANT:
-     * Blue Lemonade can override the extension's ordinary
-     * display rule. Keep these body.salty + !important rules.
-     * This is the part that makes the panel actually open.
-     */
-
-    body.salty .stwii--panel {
-        position: fixed !important;
-
-        /* Original CSS anchor positioning off on mobile */
-        position-anchor: none !important;
-        position-area: unset !important;
-        position-try-fallbacks: none !important;
-
-        /* Sit directly above the Blue Lemonade input area */
-        left: 20px !important;
-        right: 20px !important;
-        bottom: 190px !important;
-        top: auto !important;
-
-        transform: none !important;
-
-        /*
-         * Stable mobile size.
-         * On the reference phone this resolves to a comfortable
-         * 300–500px tall sheet instead of a collapsed strip.
-         */
-        width: auto !important;
-        height: 55vh !important;
-
-        min-width: 0 !important;
-        max-width: none !important;
-
-        min-height: 300px !important;
-        max-height: 500px !important;
-
-        box-sizing: border-box !important;
-
-        margin: 0 !important;
-        padding: 12px 8px 12px 14px !important;
-
-        /* Long WI lists scroll inside the popup */
-        overflow-x: hidden !important;
-        overflow-y: scroll !important;
-
-        overscroll-behavior: contain !important;
-        -webkit-overflow-scrolling: touch !important;
-
-        /* Prevent the original desktop sizing rules interfering */
-        aspect-ratio: auto !important;
-
-        border-radius: 14px !important;
-
-        background:
-            var(--secondaryBg, var(--SmartThemeBlurTintColor)) !important;
-
-        filter:
-            drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45)) !important;
-
-        z-index: 30000 !important;
-
-        font-size: 14px !important;
-
-        scrollbar-width: auto !important;
-        scrollbar-color:
-            rgba(180, 180, 180, 0.7)
-            rgba(0, 0, 0, 0.15) !important;
-    }
-
-    /*
-     * DO NOT remove these two rules.
-     * The last broken build omitted the !important active-state
-     * override, so Blue Lemonade won the cascade and the panel
-     * remained invisible even though JS toggled the class.
-     */
-    body.salty .stwii--panel:not(.stwii--isActive) {
-        display: none !important;
-    }
-
-    body.salty .stwii--panel.stwii--isActive {
-        display: block !important;
-    }
-
-
-    /* =====================================================
-       Android / Chromium scrollbar
-       ===================================================== */
-
-    body.salty .stwii--panel::-webkit-scrollbar {
-        display: block !important;
-        width: 8px !important;
-    }
-
-    body.salty .stwii--panel::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.15) !important;
-        border-radius: 10px !important;
-    }
-
-    body.salty .stwii--panel::-webkit-scrollbar-thumb {
-        background: rgba(180, 180, 180, 0.7) !important;
-        border-radius: 10px !important;
-    }
-
-    body.salty .stwii--panel::-webkit-scrollbar-thumb:active {
-        background: rgba(230, 230, 230, 0.9) !important;
-    }
-
-
-    /* =====================================================
-       Entry layout
-       ===================================================== */
-
-    body.salty .stwii--world {
-        display: block !important;
-
-        width: 100% !important;
-        min-width: 0 !important;
-
-        margin: 8px 0 4px !important;
-
-        font-weight: 700 !important;
-        line-height: 1.4 !important;
-
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    body.salty .stwii--entry {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-
-        width: 100% !important;
-        min-width: 0 !important;
-
-        gap: 7px !important;
-
-        padding: 3px 5px !important;
-
-        box-sizing: border-box !important;
-
-        line-height: 1.4 !important;
-    }
-
-    body.salty .stwii--strategy {
-        flex: 0 0 auto !important;
-
-        min-width: 20px !important;
-
-        white-space: nowrap !important;
-        text-align: center !important;
-    }
-
-    body.salty .stwii--title {
-        flex: 1 1 auto !important;
-
-        width: auto !important;
-        min-width: 0 !important;
-
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    body.salty .stwii--sticky {
-        flex: 0 0 auto !important;
-        white-space: nowrap !important;
-    }
-
-    /*
-     * Preserve enough width for message-history titles.
-     * The upstream stylesheet deliberately uses width:0 here;
-     * on the narrow mobile sheet that can become too aggressive.
-     */
-    body.salty .stwii--messages .stwii--title {
-        flex: 1 1 auto !important;
-        width: auto !important;
-        min-width: 0 !important;
-    }
+/* Viewport positioning works with and without Blue Lemonade. */
+body .stwii--panel {
+  position: fixed !important;
+  position-anchor: auto !important;
+  position-area: none !important;
+  position-try-fallbacks: none !important;
+  inset: auto !important;
+  left: var(--stwii-left, 8px) !important;
+  bottom: var(--stwii-bottom, 80px) !important;
+  width: var(--stwii-width, calc(100vw - 16px)) !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: var(--stwii-max-height, calc(100dvh - 96px)) !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  overflow: auto !important;
+  overscroll-behavior: contain;
+  z-index: 30000 !important;
 }
 
+body .stwii--panel:not(.stwii--isActive) {
+  display: none !important;
+}
+
+body .stwii--panel.stwii--isActive {
+  display: flex !important;
+}
+
+@media (max-width: 1000px) {
+  body .stwii--panel {
+    padding: 12px !important;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+
+  .stwii--world, .stwii--entry {
+    min-width: 0;
+    flex-shrink: 0;
+  }
+
+  .stwii--entry { padding: 3px 0; }
+  .stwii--strategy, .stwii--sticky { flex: 0 0 auto; }
+  .stwii--title {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

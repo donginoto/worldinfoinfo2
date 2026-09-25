@@ -30,21 +30,27 @@ const init = ()=>{
         trigger.classList.add('stwii--trigger');
         trigger.classList.add('fa-solid', 'fa-fw', 'fa-book-atlas');
         trigger.title = 'Active WI\n---\nright click for options';
-        trigger.addEventListener('click', ()=>{
+        trigger.addEventListener('click', (evt)=>{
+            evt.stopPropagation();
+            configPanel.classList.remove('stwii--isActive');
+            positionPanels();
             panel.classList.toggle('stwii--isActive');
         });
         trigger.addEventListener('contextmenu', (evt)=>{
             evt.preventDefault();
+            evt.stopPropagation();
+            panel.classList.remove('stwii--isActive');
+            positionPanels();
             configPanel.classList.toggle('stwii--isActive');
         });
         const leftSendForm = document.querySelector('#leftSendForm');
 
         if (leftSendForm) {
-    leftSendForm.append(trigger);
+            leftSendForm.append(trigger);
         } else {
-    document.body.append(trigger);
-    }
-        
+            document.body.append(trigger);
+        }
+
     }
     const panel = document.createElement('div'); {
         panel.classList.add('stwii--panel');
@@ -121,6 +127,40 @@ const init = ()=>{
         }
         document.body.append(configPanel);
     }
+
+    // Use viewport coordinates: the trigger now lives inside the input form,
+    // and CSS anchor positioning is not available in every mobile browser.
+    const positionPanels = ()=>{
+        const viewport = window.visualViewport;
+        const viewTop = viewport?.offsetTop ?? 0;
+        const viewLeft = viewport?.offsetLeft ?? 0;
+        const viewWidth = viewport?.width ?? window.innerWidth;
+        const viewHeight = viewport?.height ?? window.innerHeight;
+        const form = document.querySelector('#send_form') ?? trigger;
+        const formTop = form.getBoundingClientRect().top;
+        const bottomEdge = Math.max(viewTop + 16, Math.min(formTop - 8, viewTop + viewHeight - 8));
+        const availableHeight = Math.max(0, bottomEdge - viewTop - 8);
+        const mobile = window.matchMedia('(max-width: 1000px)').matches;
+        const width = Math.max(0, Math.min(mobile ? viewWidth - 16 : 420, viewWidth - 16));
+        const left = mobile ? viewLeft + 8 : Math.max(viewLeft + 8,
+            Math.min(trigger.getBoundingClientRect().left, viewLeft + viewWidth - width - 8));
+        for (const popup of [panel, configPanel]) {
+            popup.style.setProperty('--stwii-left', `${left}px`);
+            popup.style.setProperty('--stwii-width', `${width}px`);
+            popup.style.setProperty('--stwii-bottom', `${window.innerHeight - bottomEdge}px`);
+            popup.style.setProperty('--stwii-max-height', `${availableHeight}px`);
+        }
+    };
+    window.addEventListener('resize', positionPanels);
+    window.visualViewport?.addEventListener('resize', positionPanels);
+    window.visualViewport?.addEventListener('scroll', positionPanels);
+    const form = document.querySelector('#send_form');
+    if (form) new ResizeObserver(positionPanels).observe(form);
+    document.addEventListener('click', (evt)=>{
+        if ([trigger, panel, configPanel].some(el=>el.contains(evt.target))) return;
+        panel.classList.remove('stwii--isActive');
+        configPanel.classList.remove('stwii--isActive');
+    });
 
     let entries = [];
 
